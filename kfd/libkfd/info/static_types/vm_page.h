@@ -76,13 +76,8 @@ u32 vm_first_phys_ppnum = 0;
 #define TiB(x) ((0ull + (x)) << 40)
 #define GiB(x) ((0ull + (x)) << 30)
 
-#if TARGET_MACOS
-#define VM_KERNEL_POINTER_SIGNIFICANT_BITS 41
-#define VM_MIN_KERNEL_ADDRESS ((u64)(0ull - TiB(2)))
-#else /* TARGET_MACOS */
 #define VM_KERNEL_POINTER_SIGNIFICANT_BITS 38
 #define VM_MIN_KERNEL_ADDRESS ((u64)(0ull - GiB(144)))
-#endif /* TARGET_MACOS */
 
 #define VM_MIN_KERNEL_AND_KEXT_ADDRESS VM_MIN_KERNEL_ADDRESS
 

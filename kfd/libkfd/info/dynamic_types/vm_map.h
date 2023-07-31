@@ -51,34 +51,6 @@ const struct vm_map vm_map_versions[] = {
         .holes_list = 0xa8,
         .object_size = 0xc0,
     },
-    {
-        .hdr_links_prev = 0x10,
-        .hdr_links_next = 0x18,
-        .min_offset = 0x20,
-        .max_offset = 0x28,
-        .hdr_nentries = 0x30,
-        .hdr_nentries_u64 = 0x30,
-        .hdr_rb_head_store_rbh_root = 0x38,
-        .pmap = 0x40,
-        .hint = 0x80,
-        .hole_hint = 0x88,
-        .holes_list = 0x90,
-        .object_size = 0xa8,
-    },
-    {
-        .hdr_links_prev = 0x10,
-        .hdr_links_next = 0x18,
-        .min_offset = 0x20,
-        .max_offset = 0x28,
-        .hdr_nentries = 0x30,
-        .hdr_nentries_u64 = 0x30,
-        .hdr_rb_head_store_rbh_root = 0x38,
-        .pmap = 0x40,
-        .hint = 0x80,
-        .hole_hint = 0x88,
-        .holes_list = 0x90,
-        .object_size = 0xa8,
-    },
     
     {
         .hdr_links_prev = 0x10,
@@ -189,11 +161,7 @@ struct _vm_map {
     u64 data_limit;
     u64 user_wire_limit;
     u64 user_wire_size;
-#if TARGET_MACOS
-    u64 vmmap_high_start;
-#else /* TARGET_MACOS */
     u64 user_range[4];
-#endif /* TARGET_MACOS */
     union {
         u64 vmu1_highest_entry_end;
         u64 vmu1_lowest_unnestable_start;

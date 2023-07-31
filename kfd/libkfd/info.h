@@ -115,15 +115,6 @@ const u64 ios_16_4_1   = 0x0000323532453032; // 20E252
 const u64 ios_16_5     = 0x0000003636463032; // 20F66
 const u64 ios_16_5_1   = 0x0000003537463032; // 20F75
 
-const u64 macos_13_0   = 0x0000303833413232; // 22A380
-const u64 macos_13_0_1 = 0x0000303034413232; // 22A400
-const u64 macos_13_1   = 0x0000003536433232; // 22C65
-const u64 macos_13_2   = 0x0000003934443232; // 22D49
-const u64 macos_13_2_1 = 0x0000003836443232; // 22D68
-const u64 macos_13_3   = 0x0000323532453232; // 22E252
-const u64 macos_13_3_1 = 0x0000313632453232; // 22E261
-const u64 macos_13_4   = 0x0000003636463232; // 22F66
-
 //#define t1sz_boot (17ull)
 #define t1sz_boot (25ull)
 #define ptr_mask ((1ull << (64ull - t1sz_boot)) - 1ull)
@@ -197,16 +188,6 @@ void info_init(struct kfd* kfd)
                 kfd->info.env.ios = true;
                 break;
             }
-            case macos_13_1: {
-                kfd->info.env.vid = 2;
-                kfd->info.env.ios = false;
-                break;
-            }
-            case macos_13_4: {
-                kfd->info.env.vid = 3;
-                kfd->info.env.ios = false;
-                break;
-            }
             default: {
                 assert_false("unsupported osversion");
             }
@@ -219,13 +200,13 @@ void info_init(struct kfd* kfd)
         
         kfd->info.env.ios = true;
         if (@available(iOS 15.4, *)) {
-            kfd->info.env.vid = 8;
-        }
-        else if (@available(iOS 15.2, *)) {
             kfd->info.env.vid = 6;
         }
-        else if (@available(iOS 15.0, *)) {
+        else if (@available(iOS 15.2, *)) {
             kfd->info.env.vid = 4;
+        }
+        else if (@available(iOS 15.0, *)) {
+            kfd->info.env.vid = 2;
         }
         
         if (ptrAuthVal != 0) {

@@ -24,14 +24,10 @@ enum puaf_method {
 };
 
 enum kread_method {
-    kread_kqueue_workloop_ctl,
-    kread_sem_open,
     kread_IOSurface,
 };
 
 enum kwrite_method {
-    kwrite_dup,
-    kwrite_sem_open,
     kwrite_IOSurface,
 };
 
@@ -149,7 +145,6 @@ struct kfd {
 #include "libkfd/info.h"
 #include "libkfd/puaf.h"
 #include "libkfd/krkw.h"
-#include "libkfd/perf.h"
 
 struct kfd* kfd_init(u64 puaf_pages, u64 puaf_method, u64 kread_method, u64 kwrite_method)
 {
@@ -157,13 +152,11 @@ struct kfd* kfd_init(u64 puaf_pages, u64 puaf_method, u64 kread_method, u64 kwri
     info_init(kfd);
     puaf_init(kfd, puaf_pages, puaf_method);
     krkw_init(kfd, kread_method, kwrite_method);
-    perf_init(kfd);
     return kfd;
 }
 
 void kfd_free(struct kfd* kfd)
 {
-    perf_free(kfd);
     krkw_free(kfd);
     puaf_free(kfd);
     info_free(kfd);
@@ -186,7 +179,6 @@ u64 kopen(u64 puaf_pages, u64 puaf_method, u64 kread_method, u64 kwrite_method)
     puaf_run(kfd);
     krkw_run(kfd);
     info_run(kfd);
-    perf_run(kfd);
     puaf_cleanup(kfd);
 
     timer_end();

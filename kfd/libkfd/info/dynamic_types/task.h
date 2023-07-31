@@ -16,8 +16,6 @@ struct task {
 const struct task task_versions[] = {
     { .map = 0x28, .threads_next = 0x58, .threads_prev = 0x60, .itk_space = 0x300, .object_size = 0x648 },
     { .map = 0x28, .threads_next = 0x58, .threads_prev = 0x60, .itk_space = 0x300, .object_size = 0x640 },
-    { .map = 0x28, .threads_next = 0x58, .threads_prev = 0x60, .itk_space = 0x300, .object_size = 0x658 },
-    { .map = 0x28, .threads_next = 0x58, .threads_prev = 0x60, .itk_space = 0x300, .object_size = 0x658 },
     
     // Note: sizes below here are wrong idc
     { .map = 0x28, .threads_next = 0x58, .threads_prev = 0x60, .itk_space = 0x330, .object_size = 0x6B0 }, // iOS 15.0 - 15.1.1 arm64
